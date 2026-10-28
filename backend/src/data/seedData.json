@@ -1,0 +1,104 @@
+/* ==========================================================================
+   The First Seven Years — Admin CMS Core Application
+   ========================================================================== */
+
+(() => {
+  // Global State
+  const state = {
+    data: null,
+    currentTab: 'dashboard',
+    currentRole: 'super_admin',
+    activeFilters: {
+      topics: 'all',
+      answers: 'all',
+      faqs: 'all',
+      videos: 'all',
+      submissions: 'all',
+      pages: 'all'
+    },
+    activeMenuSubtab: 'header',
+    footerColFilter: 'all',
+    activeSettingsSubtab: 'brand',
+    activeNotifFilter: 'all',
+    activeYtRange: '28d',
+    activeYtType: 'all',
+    ytSearchQuery: '',
+    ytSortField: 'views_desc',
+    showMenuPreview: true,
+    searchQuery: '',
+    editingItem: null,
+    editingType: null,
+    currentUser: 'usr-1',
+    selectedBoardUser: 'usr-1'
+  };
+
+  // Common YouTube Medical & Educational Disclaimer default
+  const DEFAULT_YT_DISCLAIMER = "The information provided in The First Seven Years is for educational and informational purposes only and is not intended as a substitute for advice from your pediatrician or other healthcare professional. Always consult with your doctor regarding any medical concerns or health conditions. The views expressed by our guests are their own and do not necessarily reflect the official policy or position of The First Seven Years.";
+
+  // Default Mock System & Clinical Alerts
+  const DEFAULT_ALERTS = [
+    {
+      id: 'alt-1',
+      type: 'red_flag',
+      title: 'Emergency triage: High fever (104.2°F) & lethargy in 7mo infant',
+      meta: 'Inbound submission #sub-102 · Urgent clinical review recommended',
+      time: '8 mins ago',
+      unread: true,
+      actionTab: 'submissions'
+    },
+    {
+      id: 'alt-2',
+      type: 'red_flag',
+      title: 'Respiratory alert: Severe stridor and barking cough with retractions (2yo)',
+      meta: 'Inbound submission #sub-105 · Immediate pediatrician evaluation needed',
+      time: '24 mins ago',
+      unread: true,
+      actionTab: 'submissions'
+    },
+    {
+      id: 'alt-3',
+      type: 'submission',
+      title: 'New question: "Introducing allergens with severe eczema history"',
+      meta: 'From: Elena R. · Category: Food & Nutrition · Age: 4–6 months',
+      time: '45 mins ago',
+      unread: true,
+      actionTab: 'submissions'
+    },
+    {
+      id: 'alt-4',
+      type: 'clinical',
+      title: 'Medical Review Pending: "Febrile Seizures: When to Call 911"',
+      meta: 'Assigned to Dr. Elisa Song · Verification draft pending for 2 days',
+      time: '2 hours ago',
+      unread: true,
+      actionTab: 'answers'
+    },
+    {
+      id: 'alt-5',
+      type: 'security',
+      title: 'Administrator session authenticated with Two-Factor Auth',
+      meta: 'User: dr_murray · IP: 127.0.0.1 (macOS Chrome)',
+      time: '4 hours ago',
+      unread: false,
+      actionTab: 'settings'
+    }
+  ];
+
+  // Canonical Management Area and Menu Listing Definitions
+  const MODULE_DEFS = [
+    { id: 'dashboard', name: 'Dashboard', icon: '🧭', desc: 'KPI summary, site activity, quick actions', route: '/admin/' },
+    { id: 'topics', name: 'Topic Master', icon: '🏷️', desc: '13 core topic hubs, drag-drop ordering, expert assignment', route: '/topics/' },
+    { id: 'answers', name: 'Question & Answer', icon: '❓', desc: 'Clinical answers directory, age tags, medical review', route: '/answers/' },
+    { id: 'faqs', name: 'FAQ Management', icon: '💡', desc: 'Categorized FAQs and public /faq/ knowledge base', route: '/faq/' },
+    { id: 'videos', name: 'Video Library', icon: '🎬', desc: 'Episodes, clips, full transcripts, and answer linking', route: '/episodes/' },
+    { id: 'youtube', name: 'YouTube Reports', icon: '▶️', desc: 'Channel analytics, views, watch time, and video metrics', route: '/admin/' },
+    { id: 'submissions', name: 'Ask the Doctor Inbox', icon: '📥', desc: 'Parent questions, emergency triage flags, convert to Q&A', route: '/ask-the-doctor/' },
+    { id: 'experts', name: 'Experts & Hosts', icon: '🩺', desc: 'Doctor profiles, headshot photos, bio & credentials', route: '/experts/' },
+    { id: 'pages', name: 'Page Management', icon: '📄', desc: 'Static/content pages, template layouts, SEO metadata', route: '/about/' },
+    { id: 'menus', name: 'Menu Management', icon: '🧭', desc: 'Header navigation, mobile drawer badges, footer directory', route: '/admin/' },
+    { id: 'roles', name: 'Roles & Permissions', icon: '👥', desc: 'Team member permissions board, access levels', route: '/admin/' },
+    { id: 'settings', name: 'Settings & Security', icon: '⚙', desc: 'Brand colors, password credentials, 2FA, organization profile', route: '/admin/' }
+  ];
+
+  // Embedded Seed Data for Standalone Prototype
+  const SEED_DATA =

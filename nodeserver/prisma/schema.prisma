@@ -1,0 +1,331 @@
+// Prisma schema file for The First Seven Years
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Video {
+  id                 String   @id
+  youtube_id         String?
+  youtube_full_url   String?  @db.Text
+  youtube_short_url  String?  @db.Text
+  title              String
+  type               String?  @default("clip")
+  duration           String?
+  topic              String?
+  expert             String?
+  guest              String?
+  caption            String?  @db.Text
+  description        String?  @db.Text
+  transcript         String?  @db.LongText
+  youtube_disclaimer String?  @db.Text
+  answers            Json?
+  slug               String?
+  seo_title          String?
+  meta_desc          String?  @db.Text
+  focus_keyword      String?
+  canonical_url      String?
+  robots_index       String?
+  published          Boolean  @default(true)
+  views              Int      @default(0)
+  likes              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("videos")
+}
+
+model Topic {
+  slug          String   @id
+  name          String
+  short         String?  @db.Text
+  swatch        String?
+  intro         String?  @db.Text
+  published     Boolean  @default(true)
+  order         Int      @default(0)
+  answers       Json?
+  episodes      Json?
+  experts       Json?
+  main_video    String?
+  ages          Json?
+  seo_title     String?
+  meta_desc     String?  @db.Text
+  focus_keyword String?
+  canonical_url String?
+  robots_index  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("topics")
+}
+
+model Answer {
+  slug            String   @id
+  q               String   @db.Text
+  topic           String?
+  also            Json?
+  video           String?
+  expert          String?
+  ages            Json?
+  quick           String?  @db.Text
+  body            Json?
+  published       Boolean  @default(true)
+  reviewed        String?
+  reviewed_by     String?
+  reviewed_at     String?
+  clinical_status String?  @default("approved")
+  seo_title       String?
+  meta_desc       String?  @db.Text
+  focus_keyword   String?
+  schema_type     String?
+  canonical_url   String?
+  robots_index    String?
+  order           Int      @default(0)
+  tags            Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("answers")
+}
+
+model Faq {
+  id        String   @id
+  category  String?
+  topic     String?
+  question  String   @db.Text
+  answer    String   @db.Text
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model Episode {
+  id        String   @id
+  title     String
+  guest     String?
+  kind      String?
+  tags      Json?
+  ep        Int?
+  slug      String?
+  date      String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("episodes")
+}
+
+model Expert {
+  slug          String   @id
+  name          String
+  role          String
+  img           String?  @db.LongText
+  swatch        String?
+  short         String?  @db.Text
+  bio           Json?
+  creds         Json?
+  same          Json?
+  answers       Json?
+  episodes      Json?
+  seo_title     String?
+  meta_desc     String?  @db.Text
+  focus_keyword String?
+  keywords      String?  @db.Text
+  canonical_url String?
+  robots_index  String?
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("experts")
+}
+
+model User {
+  id          String   @id
+  name        String
+  email       String   @unique
+  username    String?  @unique
+  password    String?  @default("admin@999999")
+  role        String   @default("super_admin")
+  status      String   @default("Active")
+  last_active String?
+  permissions Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Role {
+  key         String   @id
+  name        String
+  desc        String?  @db.Text
+  permissions Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("roles")
+}
+
+model AskSubmission {
+  id          String   @id
+  parent_name String
+  child_age   String?
+  email       String
+  topic       String?
+  topics      Json?
+  question    String   @db.Text
+  date        String?
+  status      String   @default("New")
+  red_flag    Boolean  @default(false)
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("ask_submissions")
+}
+
+model MenuItem {
+  id        String   @id
+  location  String   // "header" or "footer"
+  col       String?
+  label     String
+  url       String
+  badge     String?
+  target    String?  @default("_self")
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("menu_items")
+}
+
+model Page {
+  id            String   @id
+  title         String
+  slug          String   @unique
+  url           String
+  template      String?
+  seo_title     String?
+  meta_desc     String?  @db.Text
+  focus_keyword String?
+  keywords      String?
+  canonical_url String?
+  robots_index  String?
+  robots_follow String?
+  og_title      String?
+  og_type       String?
+  og_desc       String?  @db.Text
+  og_image      String?
+  schema_type   String?
+  twitter_card  String?
+  excerpt       String?  @db.Text
+  body          String?  @db.LongText
+  updated       String?
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("pages")
+}
+
+model Alert {
+  id        String   @id
+  type      String
+  title     String
+  meta      String?
+  time      String?
+  unread    Boolean  @default(true)
+  actionTab String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("alerts")
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model Banner {
+  id             String   @id
+  type           String   @default("promo") // "promo" | "hero"
+  title          String?  @db.Text
+  content        String?  @db.Text
+  badge          String?
+  highlight      String?
+  link_text      String?
+  link_url       String?  @db.Text
+  bg_color       String?  @default("#2B3C56")
+  text_color     String?  @default("#ffffff")
+  image          String?  @db.LongText
+  secondary_text String?  @db.Text
+  data           Json?
+  published      Boolean  @default(true)
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("banners")
+}
+
+
+model Book {
+  id              String         @id
+  slug            String?        @unique
+  title           String
+  subtitle        String?        @db.Text
+  eyebrow         String?        @db.Text
+  author          String?
+  author_role     String?        @default("Co-host · Functional medicine")
+  author_image    String?        @db.LongText
+  approver1_name  String?        @default("Dr. Bill Sears")
+  approver1_role  String?        @default("Pediatrician · Author · Featured expert")
+  approver1_image String?        @db.LongText
+  approver2_name  String?        @default("Dr. Murray Clarke")
+  approver2_role  String?        @default("Host · The First Seven Years")
+  approver2_image String?        @db.LongText
+  approved_by     String?
+  description     String?        @db.LongText
+  note            String?        @db.Text
+  status          String         @default("In Production")
+  publisher       String?
+  published       Boolean        @default(true)
+  is_featured     Boolean        @default(false)
+  order           Int            @default(0)
+  cover_type      String?        @default("concept")
+  cover_image     String?        @db.LongText
+  preorder_url    String?        @db.Text
+  topics          Json?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  subscribers     BookWaitlist[]
+
+  @@map("books")
+}
+
+model BookWaitlist {
+  id        String   @id
+  book_id   String?
+  book      Book?    @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  email     String
+  name      String?
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("book_waitlist")
+}
