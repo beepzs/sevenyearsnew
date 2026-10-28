@@ -272,26 +272,7 @@ export const Videos: React.FC = () => {
               </button>
             </div>
 
-            <div className="filter-pills">
-              <button
-                className={`filter-pill ${filter === 'all' ? 'is-active' : ''}`}
-                onClick={() => setFilter('all')}
-              >
-                All
-              </button>
-              <button
-                className={`filter-pill ${filter === 'published' ? 'is-active' : ''}`}
-                onClick={() => setFilter('published')}
-              >
-                Published
-              </button>
-              <button
-                className={`filter-pill ${filter === 'draft' ? 'is-active' : ''}`}
-                onClick={() => setFilter('draft')}
-              >
-                Drafts
-              </button>
-            </div>
+
           </div>
         </div>
 
